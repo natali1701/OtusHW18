@@ -11,10 +11,6 @@ MACHINES = {
                    {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
                    {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"}
                 ],
-        :bonding => {
-                 conName: "mybond0",
-                 address: "192.168.255.1/30",
-                 devices: "eth1 eth2",
         }
   },
   :centralRouter => {
@@ -27,11 +23,7 @@ MACHINES = {
                    {adapter: 6, auto_config: false, virtualbox__intnet: "router-net"}
                    
                 ],
-        :bonding => {
-                 conName: "mybond0",
-                 address: "192.168.255.2/30",
-                 devices: "eth1 eth5",
-        }
+         }
   },
   :office1Router => {
         :box_name => "centos/7",
@@ -48,11 +40,7 @@ MACHINES = {
                    #central
                    {ip: '192.168.0.1', adapter: 9, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
                 ]
-        :bonding => {
-        conName: "mybond0",
-        address: "192.168.2.2/30",
-        devices: "eth1 eth5",
-        }
+         }
   },
   :office2Router => {
         :box_name => "centos/7",
@@ -67,11 +55,7 @@ MACHINES = {
                    {ip: '192.168.2.1', adapter: 7, netmask: "255.255.255.192", virtualbox__intnet: "off1server-net"},
                    #central
                    {ip: '192.168.0.1', adapter: 8, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
-        ]
-        :bonding => {
-        conName: "mybond0",
-        address: "192.168.1.2/30",
-        devices: "eth1 eth5",
+                ]
         }
   },
   :centralServer => {
