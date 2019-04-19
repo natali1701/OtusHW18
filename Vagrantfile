@@ -93,8 +93,7 @@ MACHINES = {
                   { ip: '192.168.2.67', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
         ],
         vlans: [
-                  { vlanID: 3, interface: "eth1", ip: "10.10.10.1/24"},           ]
-        ]
+            { vlanID: 3, interface: "eth1", ip: "10.10.10.1/24"},           ]
   },
   :testClient1 => {
         :box_name => "centos/7",
@@ -103,7 +102,7 @@ MACHINES = {
         ],
         vlans: [
             { vlanID: 2, interface: "eth1", ip: "10.10.10.254/24"},
-        ]
+        ],
   },
   :testClient2 => {
         :box_name => "centos/7",
@@ -112,7 +111,7 @@ MACHINES = {
         ],
         vlans: [
                   { vlanID: 3, interface: "eth1", ip: "10.10.10.254/24"},
-        ]
+        ],
    },
   
 }
@@ -142,14 +141,16 @@ MACHINES = {
         case boxname.to_s
         when "inetRouter"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
-            sysctl net.ipv4.conf.all.forwarding=1
+            eco "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+            sysctl -p /etc/sysctl.conf
+            # start bonding
             echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.255.1\nPREFIX=30\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
             echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
             echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth2\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth2
+            systemctl restart network
             iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
         ip route add 192.168.0.0/16 via 192.168.255.2
         # echo "192.168.0.0/16 via 192.168.255.2 dev eth2" >> /etc/sysconfig/network-scripts/route-eth2
-        # systemctl restart network
         SHELL
         when "centralRouter"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
@@ -157,6 +158,7 @@ MACHINES = {
                       echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.255.2\nPREFIX=30\nGATEWAY=192.168.255.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
           echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
           echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
+        systemctl restart network
         SHELL
         when "office1Router"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
@@ -186,7 +188,7 @@ MACHINES = {
           #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth1:1" > /etc/sysconfig/network-scripts/ifcfg-eth1:1
           #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth1:2" > /etc/sysconfig/network-scripts/ifcfg-eth1:2
           #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.0.1\nNETMASK=255.255.255.240\nDEVICE=eth2" > /etc/sysconfig/network-scripts/ifcfg-eth2
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth3" > /etc/sysconfig/network-scripts/ifcfg-eth3                       echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth3" > /etc/sysconfig/network-scripts/ifcfg-eth3           echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
           systemctl stop NetworkManager
           systemctl disable NetworkManager
           sleep 5
@@ -218,12 +220,12 @@ MACHINES = {
       when "testServer1"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
           echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nVLAN=yes\nONBOOT=yes\nIPADDR=10.10.10.1\nNETMASK=255.255.255.0\nDEVICE=eth1.1" > /etc/sysconfig/network-scripts/ifcfg-eth1.1
-            # sudo systemctl restart network
+          #systemctl restart network
             SHELL
         when "testServer2"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
           echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nVLAN=yes\nONBOOT=yes\nIPADDR=10.10.10.1\nNETMASK=255.255.255.0\nDEVICE=eth1.2" > /etc/sysconfig/network-scripts/ifcfg-eth1.2
-            # sudo systemctl restart network
+        #systemctl restart network
             SHELL
         when "testClient1"
           box.vm.provision "shell", run: "always", inline: <<-SHELL
