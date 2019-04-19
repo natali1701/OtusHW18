@@ -8,57 +8,71 @@ MACHINES = {
         :box_name => "centos/7",
         #:public => {:ip => '10.10.10.1', :adapter => 1},
         :net => [
-                   { adapter: 2, virtualbox__intnet: "router-net" },
-                   { adapter: 3, virtualbox__intnet: "router-net" },
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+                   {adapter: 3, auto_config: false, virtualbox__intnet: "router-net"}
                 ],
-        bonding: {
+        :bonding => {
                  conName: "mybond0",
                  address: "192.168.255.1/30",
                  devices: "eth1 eth2",
-        },
+        }
   },
   :centralRouter => {
         :box_name => "centos/7",
         :net => [
-                   { adapter: 2, virtualbox__intnet: "router-net" },
-                   { adapter: 3, virtualbox__intnet: "router-net" },
-                   {ip: '192.168.255.2', adapter: 4, netmask: "255.255.255.252", virtualbox__intnet: "router-net"},
-                   {ip: '192.168.0.1', adapter: 5, netmask: "255.255.255.240", virtualbox__intnet: "dircentral-net"},
-                   {ip: '192.168.1.1', adapter: 6, netmask: "255.255.255.128", virtualbox__intnet: "office2router-net"},
-                   {ip: '192.168.2.1', adapter: 7, netmask: "255.255.255.192", virtualbox__intnet: "office1router-net"},
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},            
+                   {ip: '192.168.0.1', adapter: 3, netmask: "255.255.255.240", virtualbox__intnet: "dircentral-net"},
+                   {ip: '192.168.1.1', adapter: 4, netmask: "255.255.255.128", virtualbox__intnet: "office2router-net"},
+                   {ip: '192.168.2.1', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "office1router-net"},
+                   {adapter: 6, auto_config: false, virtualbox__intnet: "router-net"}
+                   
                 ],
-        bonding: {
-        conName: "mybond0",
-        address: "192.168.255.2/30",
-        devices: "eth1 eth2",
-        },
+        :bonding => {
+                 conName: "mybond0",
+                 address: "192.168.255.2/30",
+                 devices: "eth1 eth5",
+        }
   },
   :office1Router => {
         :box_name => "centos/7",
         :net => [  
                    #office1
-                   {ip: '192.168.2.1', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "devof1-net"},
-                   {ip: '192.168.2.65', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "testseroff1-net"},
-                   {ip: '192.168.2.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "managoff1-net"},
-                   {ip: '192.168.2.193', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "hardwareoff1-net"},
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+                   {ip: '192.168.2.1', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "devof1-net"},
+                   {ip: '192.168.2.65', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "testseroff1-net"},
+                   {ip: '192.168.2.129', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "managoff1-net"},
+                   {adapter: 6, auto_config: false, virtualbox__intnet: "router-net"},
+                   {ip: '192.168.2.193', adapter: 7, netmask: "255.255.255.192", virtualbox__intnet: "hardwareoff1-net"},
                    #office2
-                   {ip: '192.168.1.1', adapter: 6, netmask: "255.255.255.128", virtualbox__intnet: "off2server-net"},
+                   {ip: '192.168.1.1', adapter: 8, netmask: "255.255.255.128", virtualbox__intnet: "off2server-net"},
                    #central
-                   {ip: '192.168.0.1', adapter: 7, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
+                   {ip: '192.168.0.1', adapter: 9, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
                 ]
+        :bonding => {
+        conName: "mybond0",
+        address: "192.168.2.2/30",
+        devices: "eth1 eth5",
+        }
   },
   :office2Router => {
         :box_name => "centos/7",
         :net => [
                    #office2
-                   {ip: '192.168.1.1', adapter: 2, netmask: "255.255.255.128", virtualbox__intnet: "devof2-net"},
-                   {ip: '192.168.1.129', adapter: 3, netmask: "255.255.255.192", virtualbox__intnet: "testseroff2-net"},
-                   {ip: '192.168.1.193', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "hardwareoff2-net"},
+                   {adapter: 2, auto_config: false, virtualbox__intnet: "router-net"},
+                   {ip: '192.168.1.1', adapter: 3, netmask: "255.255.255.128", virtualbox__intnet: "devof2-net"},
+                   {ip: '192.168.1.129', adapter: 4, netmask: "255.255.255.192", virtualbox__intnet: "testseroff2-net"},
+                   {ip: '192.168.1.193', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "hardwareoff2-net"},
                    #office1
-                   {ip: '192.168.2.1', adapter: 5, netmask: "255.255.255.192", virtualbox__intnet: "off1server-net"},
+                   {adapter: 6, auto_config: false, virtualbox__intnet: "router-net"},
+                   {ip: '192.168.2.1', adapter: 7, netmask: "255.255.255.192", virtualbox__intnet: "off1server-net"},
                    #central
-                   {ip: '192.168.0.1', adapter: 6, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
+                   {ip: '192.168.0.1', adapter: 8, netmask: "255.255.255.240", virtualbox__intnet: "centralserver-net"},
         ]
+        :bonding => {
+        conName: "mybond0",
+        address: "192.168.1.2/30",
+        devices: "eth1 eth5",
+        }
   },
   :centralServer => {
         :box_name => "centos/7",
@@ -81,37 +95,38 @@ MACHINES = {
    :testServer1 => {
         :box_name => "centos/7",
         :net => [
-                   { ip: '192.168.2.66', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
+                    { ip: '192.168.2.66', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
         ],
-        vlans: [
-            { vlanID: 2, interface: "eth1", ip: "10.10.10.1/24"},
-        ],
+        :vlans => [
+                    { vlanID: 2, interface: "eth1", ip: "10.10.10.1/24"},
+        ]
   },
   :testServer2 => {
         :box_name => "centos/7",
         :net => [
-                  { ip: '192.168.2.67', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
+                     { ip: '192.168.2.67', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
         ],
-        vlans: [
-            { vlanID: 3, interface: "eth1", ip: "10.10.10.1/24"},           ]
+        :vlans => [
+                     { vlanID: 3, interface: "eth1", ip: "10.10.10.1/24"},
+         ]
   },
   :testClient1 => {
         :box_name => "centos/7",
         :net => [
-                  { ip: '192.168.2.3', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
+                     { ip: '192.168.2.3', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
         ],
-        vlans: [
-            { vlanID: 2, interface: "eth1", ip: "10.10.10.254/24"},
-        ],
+        :vlans => [
+                     { vlanID: 2, interface: "eth1", ip: "10.10.10.254/24"},                
+        ]
   },
   :testClient2 => {
         :box_name => "centos/7",
         :net => [
-                  { ip: '192.168.2.4', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
+                      { ip: '192.168.2.4', adapter: 2, netmask: "255.255.255.192", virtualbox__intnet: "test-net" },
         ],
-        vlans: [
-                  { vlanID: 3, interface: "eth1", ip: "10.10.10.254/24"},
-        ],
+        :vlans => [
+                      { vlanID: 3, interface: "eth1", ip: "10.10.10.254/24"}
+        ]
    },
   
 }
@@ -149,46 +164,65 @@ MACHINES = {
             echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth2\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth2
             systemctl restart network
             iptables -t nat -A POSTROUTING ! -d 192.168.0.0/16 -o eth0 -j MASQUERADE
-        ip route add 192.168.0.0/16 via 192.168.255.2
-        # echo "192.168.0.0/16 via 192.168.255.2 dev eth2" >> /etc/sysconfig/network-scripts/route-eth2
+            ip route add 192.168.0.0/16 via 192.168.255.2
+            # echo "192.168.0.0/16 via 192.168.255.2 dev eth2" >> /etc/sysconfig/network-scripts/route-eth2
         SHELL
         when "centralRouter"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
-          echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
-                      echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.255.2\nPREFIX=30\nGATEWAY=192.168.255.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
-          echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
-          echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
-        systemctl restart network
-        SHELL
+            echo "net.ipv4.ip_forward=1" >> /etc/sysctl.conf
+            echo "net.ipv4.conf.all.forwarding=1"  >> /etc/sysctl.conf
+            echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.255.2\nPREFIX=30\nGATEWAY=192.168.255.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
+            echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
+            echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
+            echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
+            # echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+            # ip ro add default via 192.168.255.1 dev eth1 metric 1
+            systemctl restart network
+            # Central office
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.33\nNETMASK=255.255.255.240\nDEVICE=eth2:0" > /etc/sysconfig/network-scripts/ifcfg-eth2:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.65\nNETMASK=255.255.255.192\nDEVICE=eth2:1" > /etc/sysconfig/network-scripts/ifcfg-eth2:1
+            # Office 2      
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth3:0" > /etc/sysconfig/network-scripts/ifcfg-eth3:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth3:1" > /etc/sysconfig/network-scripts/ifcfg-eth3:1
+            # Office 1
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.65\nNETMASK=255.255.255.192\nDEVICE=eth4:0" > /etc/sysconfig/network-scripts/ifcfg-eth4:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.129\nNETMASK=255.255.255.192\nDEVICE=eth4:1" > /etc/sysconfig/network-scripts/ifcfg-eth4:1
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.193\nNETMASK=255.255.255.192\nDEVICE=eth4:2" > /etc/sysconfig/network-scripts/ifcfg-eth4:2
+           SHELL
         when "office1Router"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
-            #echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.255.2\nPREFIX=30\nGATEWAY=192.168.255.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
-            #echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
-            #echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
+            echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
+            echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.2.2\nPREFIX=30\nGATEWAY=192.168.2.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
+            echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
+            echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
+            systemctl restart network
             #echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0 
             # echo "GATEWAY=192.168.255.1" >> /etc/sysconfig/network-scripts/ifcfg-eth1
             # ip ro add default via 192.168.255.1 dev eth1 metric 1
             # Central office
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.33\nNETMASK=255.255.255.240\nDEVICE=eth2:0" > /etc/sysconfig/network-scripts/ifcfg-eth2:0
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.65\nNETMASK=255.255.255.192\nDEVICE=eth2:1" > /etc/sysconfig/network-scripts/ifcfg-eth2:1
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.33\nNETMASK=255.255.255.240\nDEVICE=eth2:0" > /etc/sysconfig/network-scripts/ifcfg-eth2:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.0.65\nNETMASK=255.255.255.192\nDEVICE=eth2:1" > /etc/sysconfig/network-scripts/ifcfg-eth2:1
             # Office 2      
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth3:0" > /etc/sysconfig/network-scripts/ifcfg-eth3:0
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth3:1" > /etc/sysconfig/network-scripts/ifcfg-eth3:1
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth3:0" > /etc/sysconfig/network-scripts/ifcfg-eth3:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth3:1" > /etc/sysconfig/network-scripts/ifcfg-eth3:1
             # Office 1
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.65\nNETMASK=255.255.255.192\nDEVICE=eth4:0" > /etc/sysconfig/network-scripts/ifcfg-eth4:0
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.129\nNETMASK=255.255.255.192\nDEVICE=eth4:1" > /etc/sysconfig/network-scripts/ifcfg-eth4:1
-            #echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.193\nNETMASK=255.255.255.192\nDEVICE=eth4:2" > /etc/sysconfig/network-scripts/ifcfg-eth4:2
-             ip ro add default via 192.168.2.1 dev eth1 metric 1
-      systemctl restart network
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.65\nNETMASK=255.255.255.192\nDEVICE=eth4:0" > /etc/sysconfig/network-scripts/ifcfg-eth4:0
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.129\nNETMASK=255.255.255.192\nDEVICE=eth4:1" > /etc/sysconfig/network-scripts/ifcfg-eth4:1
+            echo -e "BOOTPROTO=static\nONBOOT=yes\nIPADDR=192.168.2.193\nNETMASK=255.255.255.192\nDEVICE=eth4:2" > /etc/sysconfig/network-scripts/ifcfg-eth4:2
       SHELL
       when "office2Router"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
-          echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.1\nNETMASK=255.255.255.128\nDEVICE=eth1:0" > /etc/sysconfig/network-scripts/ifcfg-eth1:0
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth1:1" > /etc/sysconfig/network-scripts/ifcfg-eth1:1
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth1:2" > /etc/sysconfig/network-scripts/ifcfg-eth1:2
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.0.1\nNETMASK=255.255.255.240\nDEVICE=eth2" > /etc/sysconfig/network-scripts/ifcfg-eth2
-          #echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth3" > /etc/sysconfig/network-scripts/ifcfg-eth3           echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
+          echo "net.ipv4.conf.all.forwarding=1" >> /etc/sysctl.conf
+          #echo "DEFROUTE=no" >> /etc/sysconfig/network-scripts/ifcfg-eth0
+          echo -e 'NM_CONTROLED=no\nDEVICE=bond0\nONBOOT=yes\nTYPE=Bond\nBONDING_MASTER=yes\nIPADDR=192.168.1.2\nPREFIX=30\nGATEWAY=192.168.1.1\nBOOTPROTO=static\nBONDING_OPTS="mode=1 miimon=100 fail_over_mac=1"' > /etc/sysconfig/network-scripts/ifcfg-bond0
+          echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth1\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth1
+          echo -e "NM_CONTROLED=no\nBOOTPROTO=static\nONBOOT=yes\nDEVICE=eth5\nMASTER=bond0\nSLAVE=yes" > /etc/sysconfig/network-scripts/ifcfg-eth5
+          systemctl restart network
+          echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.1\nNETMASK=255.255.255.128\nDEVICE=eth2:0" > /etc/sysconfig/network-scripts/ifcfg-eth2:0
+          echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.129\nNETMASK=255.255.255.192\nDEVICE=eth2:1" > /etc/sysconfig/network-scripts/ifcfg-eth2:1
+          echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.1.193\nNETMASK=255.255.255.192\nDEVICE=eth2:2" > /etc/sysconfig/network-scripts/ifcfg-eth2:2
+          echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.0.1\nNETMASK=255.255.255.240\nDEVICE=eth3" > /etc/sysconfig/network-scripts/ifcfg-eth3
+          echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth4" > /etc/sysconfig/network-scripts/ifcfg-eth4            #echo "GATEWAY=192.168.1.129" >> /etc/sysconfig/network-scripts/ifcfg-eth1
           systemctl stop NetworkManager
           systemctl disable NetworkManager
           sleep 5
