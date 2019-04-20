@@ -174,7 +174,6 @@ MACHINES = {
           echo -e "BOOTPROTO=none\nONBOOT=yes\nIPADDR=192.168.2.1\nNETMASK=255.255.255.192\nDEVICE=eth4" > /etc/sysconfig/network-scripts/ifcfg-eth4            systemctl stop NetworkManager
           systemctl disable NetworkManager
           sleep 5
-          systemctl restart network
       SHELL
       when "centralServer"
         box.vm.provision "shell", run: "always", inline: <<-SHELL
